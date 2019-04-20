@@ -1,0 +1,6 @@
+{
+    "lookup":{
+        "component" :"@Component",
+        "class" : "class"
+    }
+}
