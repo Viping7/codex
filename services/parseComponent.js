@@ -1,6 +1,6 @@
 var parseJs = require("parse-js");
 var grammar = require('./../grammar')
-var request ="import { Component } from '@angular/core'@Component({  selector: 'app-root',  templateUrl: './app.component.html', styleUrls: ['./app.component.css']})export class AppComponent {title = 'Tour of Heroes';}"
+var request ="import { Component } from '@angular/core'@Component({  selector: 'app-root',  templateUrl: './app.component.html', styleUrls: ['./app.component.css']})export class AppComponent {title = 'Tour of Heroes';getData(){}}"
 var AdmZip = require("adm-zip");
 var async = require('async');
 const ELEMENTS = ["button", "section", "header", "nav", "button", "table", "input", "p", "h1", "h2","h3","h4","div"];
@@ -10,6 +10,10 @@ const jsdom = require('jsdom-arc-extn');
 const directiveMap = require('../helpers/reactDirectiveMapping');
 const { JSDOM } = jsdom;
 const template = require('../templates');
+var ts= require('typescript-parser');
+var parser =new ts.TypescriptParser();
+var fs = require("fs");
+var reactComponent = require('./reactComponent');
 module.exports= {
     parseForDB : function(data,next){
       let body = data;
@@ -52,6 +56,21 @@ module.exports= {
           console.log("Something went wrong", e);  
           next(null,{});
         }
+    },
+    readTsFile : function(){
+      try{
+          parser.parseSource(request).then(function(result){
+            result.declarations.forEach(declaration => {
+              reactComponent.createReactComponent(declaration);
+            });
+            console.log("after parsed",result);
+          },function(err){
+            console.log("after parsed",err);
+          });
+      }
+      catch(e){
+        next(e)
+      }
     }
   }
 
@@ -81,4 +100,6 @@ module.exports= {
       finalString = finalString.replace(/class[ ]*=/g,"className =");
       next(null, finalString);
     } 
+   
+    
   }

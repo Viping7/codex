@@ -2,6 +2,7 @@ var component=require('./routes/component')
 const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+var parseComponent = require('./services/parseComponent');
 module.exports = {
     'get' : [
         {
@@ -13,6 +14,10 @@ module.exports = {
         },{
             path: '/convertAndDownload/:id',
             controller: component.convertAndDownload
+        },
+        {
+            path:'/parseTs',
+            controller:parseComponent.readTsFile
         }
     ],
     'post' : [
