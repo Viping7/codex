@@ -23,7 +23,7 @@ module.exports={
     },
     saveComponent : function(req,res){
         if(req.body){
-            parseService.parse(req.file, (err,data)=>{
+            parseService.parseForDB(req.file, (err,data)=>{
                 if(err){
                     return res.status(500).json({
                         'result' : {
@@ -32,7 +32,9 @@ module.exports={
                         }
                     });
                 }
-                component.saveComponent(req.body,function(err,components){
+                data.name = req.body.name;
+                data.description = req.body.description;
+                component.saveComponent(data,function(err,components){
                     if(err){
                         res.status(500).json({
                             'result' : {
@@ -83,5 +85,22 @@ module.exports={
             });
         }
     })
-}
+    },
+    convertAndDownload: function(req,res){
+        component.getComponentsById(req.params.id, function(err,components){
+            if(err){
+                res.status(500).json({
+                    'result' : {
+                        'status' :500,
+                        'error': 'Unable to fetch data'
+                    }
+                });
+            }
+            else{
+                parseService.parseToReact(components,(err,data)=>{
+
+                })
+            }
+        })
+        }
 }

@@ -1,5 +1,7 @@
 var component=require('./routes/component')
-var parseComponent = require('./routes/parseComponent');
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 module.exports = {
     'get' : [
         {
@@ -8,11 +10,15 @@ module.exports = {
         },{
             path:'/component/:id',
             controller:component.getComponentById
+        },{
+            path: '/convertAndDownload/:id',
+            controller: component.convertAndDownload
         }
     ],
     'post' : [
         {
             path:'/components',
+            middleware:[upload.single('file')],
             controller: component.saveComponent,
         }
     ]
