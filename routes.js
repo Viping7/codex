@@ -4,6 +4,9 @@ module.exports = {
         {
             path:'/components',
             controller: component.getComponents,
+        },{
+            path:'/component/:id',
+            controller:component.getComponentById
         }
     ],
     'post' : [

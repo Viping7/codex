@@ -51,4 +51,25 @@ module.exports={
         }
         
     },
+    getComponentById: function(req,res){
+    
+    component.getComponentsById(req.params.id, function(err,components){
+        if(err){
+            res.status(500).json({
+                'result' : {
+                    'status' :500,
+                    'error': 'Unable to fetch data'
+                }
+            });
+        }
+        else{
+            res.status(200).json({
+                'result' : {
+                    'status' :200,
+                    'data': components
+                }
+            });
+        }
+    })
+}
 }
