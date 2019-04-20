@@ -1,4 +1,5 @@
 var component=require('./../Repo/component')
+const tempWrite = require('temp-write');
 var parseService = require('../services/parseComponent');
 module.exports={
     getComponents : function(req,res){
@@ -98,7 +99,17 @@ module.exports={
             }
             else{
                 parseService.parseToReact(components,(err,data)=>{
-
+                    if(err){
+                        res.status(500).json({
+                            'result' : {
+                                'status' :500,
+                                'error': 'Unable to fetch data'
+                            }
+                        });
+                    }else{
+                        let path = tempWrite.sync(new Buffer(data))
+                        res.download(path,`${components.name.trim()}.zip`);
+                    }       
                 })
             }
         })

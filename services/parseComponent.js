@@ -7,7 +7,9 @@ const ELEMENTS = ["button", "section", "header", "nav", "button", "table", "inpu
 const angularDirectives = ['*ngif','*ngfor','[(ngmodel)]',"[hidden]"];
 var UIFILES = ['html','css','scss','ts'];
 const jsdom = require('jsdom-arc-extn');
+const directiveMap = require('../helpers/reactDirectiveMapping');
 const { JSDOM } = jsdom;
+const template = require('../templates');
 module.exports= {
     parseForDB : function(data,next){
       let body = data;
@@ -34,30 +36,49 @@ module.exports= {
     },
     parseToReact: (data,next)=>{
         try{
-           let html = convertToReactStand(data.html);
+           let name = data.name.trim();
+           convertToReactStand(data.html, (err,html)=>{
+             if(err){
+              return next(err);
+             }
+            
+            var zip = new AdmZip();
+            html = template['react'](name,"css",html);
+            zip.addFile(`${name}.jsx`, Buffer.alloc(html.length, html), "This is a system generated file");
+            zip.addFile(`${name}.css`, Buffer.alloc(data.css.length, data.css), "This is a system generated file");
+            next(null,zip.toBuffer());
+           });
         }catch(e){
-
+          console.log("Something went wrong", e);  
+          next(null,{});
         }
     }
   }
 
-  function convertToReactStand(html){
+  function convertToReactStand(html,next){
     const { window } = new JSDOM(
       html, {
           resources: 'usable'
       }
     );
     window.onload = function () {
+      let finalString = window.document.querySelector('body').innerHTML;
       ELEMENTS.forEach(e => {
         var selectedElements = window.document.querySelectorAll(e);
         for(let eleKey in selectedElements) {
             if(!isNaN(eleKey)) {
+              let checkedAlready = false;
               let attributes = selectedElements[eleKey].attributes;
               for(let j=0;j<attributes.length;j++){
-                angularDirectives.includes(attributes[j]);
+                  if(attributes[j] && angularDirectives.includes(attributes[j].name)){
+                    console.log(selectedElements[eleKey].outerHTML);
+                    finalString=finalString.replace(selectedElements[eleKey].outerHTML,directiveMap[attributes[j].name](attributes[j].value,selectedElements[eleKey].innerHTML,e,['asd','asdsa']));
+                  };
               }
             }
         }
       })
+      finalString = finalString.replace(/class[ ]*=/g,"className =");
+      next(null, finalString);
     } 
   }
