@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/Viping7/codex#readme",
   "dependencies": {
+    "adm-zip": "^0.4.13",
+    "async": "^2.6.2",
     "body-parser": "^1.18.3",
     "bson": "^4.0.2",
     "express": "^4.16.4",

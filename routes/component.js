@@ -1,4 +1,5 @@
 var component=require('./../Repo/component')
+var parseService = require('../services/parseComponent');
 module.exports={
     getComponents : function(req,res){
         component.getComponents(function(err,components){
@@ -22,24 +23,35 @@ module.exports={
     },
     saveComponent : function(req,res){
         if(req.body){
-            component.saveComponent(req.body,function(err,components){
+            parseService.parse(req.file, (err,data)=>{
                 if(err){
-                    res.status(500).json({
+                    return res.status(500).json({
                         'result' : {
                             'status' :500,
-                            'error': 'Unable to save data'
+                            'message': 'Somthing went wrong'
                         }
                     });
                 }
-                else{
-                    res.status(200).json({
-                        'result' : {
-                            'status' :200,
-                            'message': 'Saved successfully'
-                        }
-                    });
-                }
-            });
+                component.saveComponent(req.body,function(err,components){
+                    if(err){
+                        res.status(500).json({
+                            'result' : {
+                                'status' :500,
+                                'error': 'Unable to save data'
+                            }
+                        });
+                    }
+                    else{
+                        res.status(200).json({
+                            'result' : {
+                                'status' :200,
+                                'message': 'Saved successfully'
+                            }
+                        });
+                    }
+                });
+            })
+          
         }
         else{
             res.status(400).json({
