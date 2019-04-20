@@ -4,6 +4,9 @@ var path = require('path');
 var app = express();
 var routeEr = require('route-er');
 var port=process.env.PORT || 5000;
+const mongoose = require('mongoose');
+var connectionString="mongodb://vipin:codex1234@ds155073.mlab.com:55073/codex"
+mongoose.connect(connectionString, {useNewUrlParser: true});
 app.get('/',function(req,res){
     res.sendFile(path.join(__dirname,'./dist/index.html'));
 });
