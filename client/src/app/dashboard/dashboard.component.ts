@@ -12,6 +12,10 @@ export class DashboardComponent implements OnInit {
 
   constructor(private restService : RestService, private router: Router,private modalService: NgbModal) { }
   components:any = [];
+  newComponent={
+    name : "",
+    description : ""
+  }
   ngOnInit() {
     this.getComponents();
   }
@@ -26,6 +30,14 @@ export class DashboardComponent implements OnInit {
   open(content) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title',size:'lg'}).result.then((result) => {
     }, (reason) => {
+    });
+  }
+  onFilesAdded(files: File[]){
+    console.log(files);
+    this.newComponent["file"]=files[0];
+  }
+  uploadAndParseFiles(){
+    this.restService.saveComponent(this.newComponent).subscribe(data=>{
     });
   }
 }

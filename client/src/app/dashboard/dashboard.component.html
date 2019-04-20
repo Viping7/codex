@@ -28,17 +28,22 @@
       <div class="col-md-6">
         <div class="form-group">
           <label for="name">Name</label>
-            <input id="name" class="form-control" placeholder="" name="name">
+            <input id="name" class="form-control" placeholder="" name="name" [(ngModel)]="newComponent.name">
         </div>
         <div class="form-group">
             <label for="desc">Description</label>
-              <textarea id="desc" class="form-control" placeholder="" name="desc"></textarea>
+              <textarea id="desc" class="form-control" placeholder="" name="desc" [(ngModel)]="newComponent.description"></textarea>
           </div>
+    </div>
+    <div class="col-md-6">
+      <ngx-dropzone class="drop-area" [multiple]="false" (filesAdded)="onFilesAdded($event)" >
+        <span *ngIf="file">{{file.name}}</span>
+      </ngx-dropzone>
     </div>
   </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-custom" (click)="modal.close('Save click')">Upload and Convert</button>
+      <button type="button" class="btn btn-custom" (click)="uploadAndParseFiles()">Upload and Convert</button>
     </div>
   </ng-template>
   
