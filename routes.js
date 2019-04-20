@@ -6,8 +6,8 @@ module.exports = {
             path:'/components',
             controller: component.getComponents,
         },{
-            path:'/getComponents',
-            controller: parseComponent.getParser,
+            path:'/component/:id',
+            controller:component.getComponentById
         }
     ],
     'post' : [

@@ -21,14 +21,19 @@ var componentSchema=mongoose.Schema({
 const Component = module.exports=mongoose.model('component',componentSchema);
 
 
-module.exports.getComponents = function(id, callback){
-    Component.find(id,callback);
+module.exports.getComponents = function(callback){
+    Component.find(callback);
+} 
+
+module.exports.getComponentsById = function(id, callback){
+    Component.findById(id,callback);
 } 
 
 module.exports.saveComponent = function(componentData,callback){
     var data = new Component(componentData);
     data.save(callback);
 }  
+
 module.exports=Component;
 
 

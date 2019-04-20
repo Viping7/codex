@@ -1,1 +1,54 @@
 /* You can add global styles to this file, and also import other style files */
+body{
+    font-family: 'Source Sans Pro', sans-serif;
+    background: #1C312D;
+}
+.btn-custom{
+    box-sizing: border-box;
+    padding: 3px 20px;
+    font-size:14px; 
+    color: #0CC9B3;
+    background: none;
+    border: 1px solid #0CC9B3;
+    &:hover{
+        color: #fff;
+        background-color: #0CC9B3;
+    }
+}
+
+.card{
+    background-color: rgba(255,255,255,0.08);
+    color: #fff;
+}
+.clear{
+    clear: both;
+}
+.modal-lg{
+    max-width: 900px;
+}
+.modal-content{
+    background-color: #1C312D;
+    .modal-header{
+        border: none !important;
+    }
+    .modal-title{
+        color: #0CC9B3;
+        font-size: 20px;
+        line-height: 26px;
+      }
+      .modal-footer{
+          border: none !important;
+      }
+  }
+
+  .close{
+      color: #fff;
+      &:hover{
+          color: #fff;
+      }
+      &:focus{
+        color: #fff;
+
+          outline: none !important;
+      }
+  }

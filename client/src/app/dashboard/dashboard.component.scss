@@ -1,0 +1,79 @@
+.heading {
+    height: 33px;
+    width: 154px;
+    font-size: 25px;
+    line-height: 33px;
+    color: #0CC9B3;
+    font-size: 25px;
+    margin-bottom: 30px;
+    width: 60%;
+    float: left;
+  }
+  .add-new{
+      float: right;
+      width: 40px;
+      height: 40px;
+      background: #0CC9B3;
+      color: #fff;
+      border-radius: 100px;
+      text-align: center;
+        font-size: 35px;
+        line-height: 40px;
+        transition: 0.2s all;
+        &:hover{
+            background: #fff;
+            color: #0CC9B3;
+            cursor: pointer;
+        }
+  }
+  .card{
+    border:1px solid transparent;
+    transition: 0.2s all;
+    cursor: pointer;
+      h3{
+          margin-top: 0px;
+            color: rgba(255,255,255,0.65);
+            font-size: 16px;
+            line-height: 26px;  
+            
+      }
+      p{
+        font-size: 13px;
+        color: rgba(255,255,255,0.65);
+
+      }
+      .btn-custom{
+          margin-top: 8px;
+      }
+      &:hover{
+          border:1px solid #0CC9B3;
+          h3,p{
+            color: rgba(255,255,255,0.65);
+          }
+          .btn-custom{
+            background: #0CC9B3;
+            color: #fff;
+          }
+      }
+  }
+label{
+    color: rgba(255,255,255,0.65)
+}
+.form-control{
+    border: 1px solid rgba(255,255,255,0.65);
+    background: none;
+    border-radius: 0px;
+    color: rgba(255,255,255,0.65);
+    resize: none;
+    &:focus{
+        outline: none !important;
+        box-shadow: none !important;
+        border-color: #0CC9B3;
+    }
+}
+.modal-footer{
+    .btn{
+        display: table;
+        margin: 0 auto;
+    }
+}

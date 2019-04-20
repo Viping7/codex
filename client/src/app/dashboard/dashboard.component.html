@@ -1,0 +1,48 @@
+<div class="container">
+  <h1 class="heading pull-left">Components</h1>
+  <div class="add-new pull-right" (click)="open(content)">+</div>
+  <div class="clear"></div>
+  <div class="row">
+    <div class="col-md-3" *ngFor='let component of components' (click)="navigate(component._id)">
+      <div class="card">
+        <div class="card-body">
+          <h3>{{component.name}}</h3>
+          <p>{{component.description}}</p>
+          <button class="btn btn-custom">View</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #content let-modal >
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add Component</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="name">Name</label>
+            <input id="name" class="form-control" placeholder="" name="name">
+        </div>
+        <div class="form-group">
+            <label for="desc">Description</label>
+              <textarea id="desc" class="form-control" placeholder="" name="desc"></textarea>
+          </div>
+    </div>
+  </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-custom" (click)="modal.close('Save click')">Upload and Convert</button>
+    </div>
+  </ng-template>
+  
+  
+  <hr>
+  
+  <pre>{{closeResult}}</pre>

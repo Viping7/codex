@@ -9,11 +9,15 @@ export class RestService {
   constructor(private http: HttpClient) {
   }
   getComponents (){
-    this.http.get('/components');
+    return this.http.get('/components');
   }
 
   saveComponent(componentData){
-    this.http.post('/components',componentData);
+    return this.http.post('/components',componentData);
+  }
+  getComponentById(id){
+    return this.http.get(`/component/${id}`);
+
   }
   
 }

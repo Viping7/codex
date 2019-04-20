@@ -1,0 +1,23 @@
+header{
+    margin-bottom: 50px;
+    .bg-light{
+        background-color: transparent !important;
+        border-bottom:1px solid #0CC9B3;
+        .navbar-brand{
+            color: #fff;
+            span{
+                color: #0CC9B3;
+            }
+        }
+        .navbar-nav{
+            li{
+                a{
+                    color: #fff;
+                    &:hover{
+                        color: #0CC9B3;
+                    }
+                }
+            }
+        }
+    }
+}
