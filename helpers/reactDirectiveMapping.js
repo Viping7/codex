@@ -18,6 +18,16 @@ module.exports = {
             return ''
         } 
     },
+    "(click)":(value,input,tagName,classes)=>{
+        try{    
+            let replacedContent = `
+                <${tagName} className="${classes.join(' ')}" onClick={${value}}">${input}</${tagName}>
+            `
+            return replacedContent;
+        }catch(e){
+            return '';
+        }
+    },
     "*ngif":(value,input,tagName,classes)=>{
         try{
             let replacedContent = `

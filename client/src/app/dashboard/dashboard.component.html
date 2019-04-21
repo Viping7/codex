@@ -36,7 +36,7 @@
           </div>
     </div>
     <div class="col-md-6">
-      <dropzone [config]="config" [message]="'Click or drag images here to upload'"></dropzone>
+      <dropzone [config]="config" (success)="onUploadSucess($event)" [message]="'Click or drag images here to upload'"></dropzone>
 
     </div>
   </div>

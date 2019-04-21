@@ -3,8 +3,8 @@ var grammar = require('./../grammar')
 var request ="import { Component } from '@angular/core'@Component({  selector: 'app-root',  templateUrl: './app.component.html', styleUrls: ['./app.component.css']})export class AppComponent {title = 'Tour of Heroes';getData(){}}"
 var AdmZip = require("adm-zip");
 var async = require('async');
-const ELEMENTS = ["button", "section", "header", "nav", "button", "table", "input", "p", "h1", "h2","h3","h4","div"];
-const angularDirectives = ['*ngif','*ngfor','[(ngmodel)]',"[hidden]"];
+const ELEMENTS = ["button", "section", "header", "nav", "button", "table", "input", "p", "h1", "h2","h3","h4","div","tr","th","td"];
+const angularDirectives = ['*ngif','*ngfor','[(ngmodel)]',"[hidden]","(click)"];
 var UIFILES = ['html','css','scss','ts'];
 const jsdom = require('jsdom-arc-extn');
 const directiveMap = require('../helpers/reactDirectiveMapping');
@@ -26,7 +26,7 @@ module.exports= {
             if(UIFILES.includes(extn)){
                   if(extn == 'html'){
                     obj.html = zip.readAsText(zipEntry);
-                  }else if(extn =='css'){
+                  }else if(extn =='css' || extn == 'scss'){
                     obj.css = zip.readAsText(zipEntry);
                   }else{
                     obj.ts = zip.readAsText(zipEntry);
@@ -47,9 +47,9 @@ module.exports= {
              }
             
             var zip = new AdmZip();
-            html = template['react'](name,"css",html);
+            html = template['react'](name,'scss',html);
             zip.addFile(`${name}.jsx`, Buffer.alloc(html.length, html), "This is a system generated file");
-            zip.addFile(`${name}.css`, Buffer.alloc(data.css.length, data.css), "This is a system generated file");
+            zip.addFile(`${name}.scss`, Buffer.alloc(data.css.length, data.css), "This is a system generated file");
             next(null,zip.toBuffer());
            });
         }catch(e){
@@ -84,20 +84,32 @@ module.exports= {
       let finalString = window.document.querySelector('body').innerHTML;
       ELEMENTS.forEach(e => {
         var selectedElements = window.document.querySelectorAll(e);
+        if(e == 'th'){
+          console.log("dsfd");
+        }
         for(let eleKey in selectedElements) {
             if(!isNaN(eleKey)) {
-              let checkedAlready = false;
               let attributes = selectedElements[eleKey].attributes;
+              let classNamesData=selectedElements[eleKey].classList;
+              let classNames=[];
+              classNamesData.forEach(cname=>{
+                classNames.push(cname);
+              });
               for(let j=0;j<attributes.length;j++){
                   if(attributes[j] && angularDirectives.includes(attributes[j].name)){
                     console.log(selectedElements[eleKey].outerHTML);
-                    finalString=finalString.replace(selectedElements[eleKey].outerHTML,directiveMap[attributes[j].name](attributes[j].value,selectedElements[eleKey].innerHTML,e,['asd','asdsa']));
+                    finalString=finalString.replace(selectedElements[eleKey].outerHTML,
+                      directiveMap[attributes[j].name](attributes[j].value,selectedElements[eleKey].innerHTML,e,classNames));
                   };
               }
             }
         }
       })
       finalString = finalString.replace(/class[ ]*=/g,"className =");
+      finalString = finalString.replace(/<!--/g,'{/*');
+      finalString = finalString.replace(/-->/g,'*/}');
+      finalString = finalString.replace(/{{/g,'{');
+      finalString = finalString.replace(/}}/g,'}');
       next(null, finalString);
     } 
    

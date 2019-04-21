@@ -42,10 +42,7 @@ export class RestService {
   }
 
   saveComponent(componentData){
-    var httpHeaders =new HttpHeaders({
-      'content-type' : 'multipart/form-data'
-    });
-    return this.http.post('/components',componentData,{headers:httpHeaders});
+    return this.http.post('/components',componentData);
   }
   getComponentById(id){
     return this.http.get(`/component/${id}`);

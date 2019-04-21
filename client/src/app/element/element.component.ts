@@ -17,7 +17,9 @@ export class ElementComponent implements OnInit {
           this.restService.getComponentById(params['id'])
               .subscribe(data => this.component = data['result'].data );
       }
-  })
+    })
   }
-
+  download(id){
+    window.open(`/convertAndDownload/${id}`)
+  }
 }

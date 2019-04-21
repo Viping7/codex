@@ -34,8 +34,8 @@ module.exports.saveComponent = function(componentData,callback){
 } 
 
 module.exports.createOrUpdate = function(componentData,callback){
-    if(componentData._id){
-        Component.update({_id: componentData._id}, componentData, callback);
+    if(componentData.id){
+        Component.update({_id: componentData.id}, componentData, callback);
     }
     else{
         var data = new Component(componentData);

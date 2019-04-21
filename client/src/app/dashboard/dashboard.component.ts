@@ -39,43 +39,34 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  onFilesAdded(files: File[]){
-    console.log(files);
-    const reader = new FileReader();
-    reader.onload = (e: ProgressEvent) => {
-      const content = (e.target as FileReader).result;
-        console.log(content);
-       };
-    this.formData.append('file',files);
-    this.newComponent["file"] = new Blob(files);
-  }
+  // onFilesAdded(files: File[]){
+  //   console.log(files);
+  //   const reader = new FileReader();
+  //   reader.onload = (e: ProgressEvent) => {
+  //     const content = (e.target as FileReader).result;
+  //       console.log(content);
+  //      };
+  //   this.formData.append('file',files);
+  //   this.newComponent["file"] = new Blob(files);
+  // }
 
+  onUploadSucess(event){
+    this.newComponent["id"] = event[1].result.data._id;
+  }
   uploadAndParseFiles(){
     // this.formData.append('name',this.newComponent.name);
     // this.formData.append('description', this.newComponent.description)
-    // if(this.newComponent["id"]){
-    //   this.formData.append('id', this.newComponent["_id"])
-    // } 
+    if(!this.newComponent["id"]){
+      alert("Please provide name and desc");
+    }else{
+      
     this.restService.saveComponent(this.newComponent).subscribe(data=>{
+      debugger;
+      this.modalService.dismissAll();
       if(data["result"].status==200){
-        let response=data["result"];
-        if(response.data && response.data.id){
-          this.newComponent=response.data;
-          var keyArray=['id' ,'html' ,'description' , 'css' , 'ts' , 'name'];
-          var count=0;
-          keyArray.forEach(k=>{
-            if(this.newComponent[k]){
-              count++;
-            }
-          });
-          if(count==6){
-            this.router.navigate([`/component/${this.newComponent["id"]}`]);
-          }
-          else{
-            this.restService.error("Failure" , "Please enter name and description and upload a zip file");
-          }
-        }
+        this.router.navigate([`/component/${this.newComponent["id"]}`]);
       }
     });
+    }
   }
 }
