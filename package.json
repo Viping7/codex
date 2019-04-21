@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
 
-    "preinstall": "npm update && cd client && npm cache clean -f && npm install -g @angular/cli @angular/compiler@6.1.10 @angular/core@6.1.10 @angular/compiler-cli@6.1.10 @angular-devkit/build-angular && npm install -g typescript && ng update &&  npm install",
+    "preinstall": "npm update && cd client && npm cache clean -f && npm install -g @angular/cli @angular/compiler@6.1.10 @angular/core@6.1.10 @angular/compiler-cli@6.1.10 @angular-devkit/build-angular && npm install -g typescript@'>=2.7.2 <2.10' && ng update &&  npm install",
     "postinstall": "cd client && ng build"
 },
   "repository": {
