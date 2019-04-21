@@ -34,6 +34,7 @@ module.exports = {
             {
                 (${value})?<${tagName} className="${classes.join(' ')}">${input}</${tagName}>:null
             }`
+            console.log(replacedContent);
             return replacedContent;
         }catch(e){
             return ''
