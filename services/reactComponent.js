@@ -1,5 +1,5 @@
 var fs = require('fs');
-module.exports.createReactComponent = function (declarations) {
+createReactComponent = function (declarations) {
     
    // if (declarations =='ClassDeclaration') {
        let componentName = declarations.name;
@@ -14,5 +14,21 @@ module.exports.createReactComponent = function (declarations) {
         });
    // }
 }
+
+module.exports.readTsFile = function(){
+    try{
+        parser.parseSource(request).then(function(result){
+          result.declarations.forEach(declaration => {
+            createReactComponent(declaration);
+          });
+          console.log("after parsed",result);
+        },function(err){
+          console.log("after parsed",err);
+        });
+    }
+    catch(e){
+      next(e)
+    }
+  }
 
 

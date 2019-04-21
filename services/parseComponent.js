@@ -41,36 +41,38 @@ module.exports= {
     parseToReact: (data,next)=>{
         try{
            let name = data.name.trim();
-           convertToReactStand(data.html, (err,html)=>{
-             if(err){
-              return next(err);
+           async.series([
+             function(callback){
+              convertToReactStand(data.html,(err,html)=>{
+                    if(err){
+                      return next(err);
+                    }
+                    callback(null,html);
+              })
+             },
+             function(callback){
+              readTsFile(data.ts,(err,ts)=>{
+                if(err){
+                  return next(err);
+                }
+                callback(null,ts);
+              })
              }
-            
-            var zip = new AdmZip();
-            html = template['react'](name,'scss',html);
-            zip.addFile(`${name}.jsx`, Buffer.alloc(html.length, html), "This is a system generated file");
-            zip.addFile(`${name}.scss`, Buffer.alloc(data.css.length, data.css), "This is a system generated file");
-            next(null,zip.toBuffer());
-           });
+           ],function(err,results){
+             console.log("results of series",results);
+             if(err){
+               next(err);
+             }
+             var zip = new AdmZip();
+             html = template['react'](name,"css",results[0],results[1].stateParams);
+             zip.addFile(`${name}.jsx`, Buffer.alloc(html.length, html), "This is a system generated file");
+             zip.addFile(`${name}.css`, Buffer.alloc(data.css.length, data.css), "This is a system generated file");
+             next(null,zip.toBuffer());
+           })
         }catch(e){
           console.log("Something went wrong", e);  
           next(null,{});
         }
-    },
-    readTsFile : function(){
-      try{
-          parser.parseSource(request).then(function(result){
-            result.declarations.forEach(declaration => {
-              reactComponent.createReactComponent(declaration);
-            });
-            console.log("after parsed",result);
-          },function(err){
-            console.log("after parsed",err);
-          });
-      }
-      catch(e){
-        next(e)
-      }
     }
   }
 
@@ -114,4 +116,44 @@ module.exports= {
     } 
    
     
+  }
+
+  function readTsFile(tsString,next){
+   let  reactDeclarations ={};
+    try{
+        parser.parseSource(tsString).then(function(result){
+          result.declarations.forEach(declaration => {
+           let stateParams = reactState(declaration.properties);
+                reactDeclarations.stateParams = stateParams;
+                console.log("react Declarations",reactDeclarations);
+                next(null,reactDeclarations);
+          });
+        },function(err){
+        });
+    }
+    catch(e){
+      next(e)
+    }
+  }
+  function reactState(properties){
+    let stateStructure =`this.state={`;
+    properties.forEach(property=>{
+
+          stateStructure += `${property.name}`+':'+`${property.type}`+',';
+        
+      
+    })
+   
+    console.log("state Structre",stateStructure.replace(/"/g,""));
+    var lIndex= stateStructure.lastIndexOf(',');
+    let finalState = replaceAt(lIndex,stateStructure);
+    console.log("final state structure after ,",finalState);
+   // stateStructure.replaceAt(lIndex,stateStructure);
+    return finalState.replace(/"/g,"");
+    
+  }
+
+  function replaceAt(lIndex,input){
+    return input.substring(0, lIndex) + "" + input.substring(lIndex + 1)+'}';
+
   }
