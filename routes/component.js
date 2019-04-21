@@ -22,20 +22,20 @@ module.exports={
             }
         });
     },
-    saveComponent : function(req,res){
-        if(req.body){
+    uploadFilestoDB : function(req,res){
+        if(req.file){
             parseService.parseForDB(req.file, (err,data)=>{
                 if(err){
                     return res.status(500).json({
                         'result' : {
                             'status' :500,
-                            'message': 'Somthing went wrong'
+                            'message': 'Something went wrong'
                         }
                     });
                 }
                 data.name = req.body.name;
                 data.description = req.body.description;
-                component.saveComponent(data,function(err,components){
+                component.createOrUpdate(data,function(err,components){
                     if(err){
                         res.status(500).json({
                             'result' : {
@@ -55,7 +55,37 @@ module.exports={
                     }
                 });
             })
-          
+        }
+        else{
+            res.status(500).json({
+                'result' : {
+                    'status' :500,
+                    'error': 'Unable to save data'
+                }
+            });
+        }
+    },
+    saveComponent : function(req,res){
+        if(req.body){
+            component.createOrUpdate(req.body,function(err,components){
+                if(err){
+                    res.status(500).json({
+                        'result' : {
+                            'status' :500,
+                            'error': 'Unable to save data'
+                        }
+                    });
+                }
+                else{
+                    res.status(200).json({
+                        'result' : {
+                            'status' :200,
+                            'message': 'Saved successfully',
+                            'data' : components
+                        }
+                    });
+                }
+            });
         }
         else{
             res.status(400).json({
@@ -64,8 +94,7 @@ module.exports={
                     'error': 'Request Body missing'
                 }
             });
-        }
-        
+        }   
     },
     getComponentById: function(req,res){
     
@@ -88,26 +117,26 @@ module.exports={
         }
     })
     },
-    createOrUpdate : function(req,res){
-        component.createOrUpdate(req.body,function(err,data){
-            if(err){
-                res.status(500).json({
-                    'result' : {
-                        'status' :500,
-                        'error': 'Unable to fetch data'
-                    }
-                })
-            }
-            else{
-                res.status(200).json({
-                    'result' : {
-                        'status' :200,
-                        'data' : data
-                    }
-                })
-            }
-        })
-    },
+    // createOrUpdate : function(req,res){
+    //     component.createOrUpdate(req.body,function(err,data){
+    //         if(err){
+    //             res.status(500).json({
+    //                 'result' : {
+    //                     'status' :500,
+    //                     'error': 'Unable to fetch data'
+    //                 }
+    //             })
+    //         }
+    //         else{
+    //             res.status(200).json({
+    //                 'result' : {
+    //                     'status' :200,
+    //                     'data' : data
+    //                 }
+    //             })
+    //         }
+    //     })
+    // },
     convertAndDownload: function(req,res){
         component.getComponentsById(req.params.id, function(err,components){
             if(err){

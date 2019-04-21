@@ -15,7 +15,7 @@ import { DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper'
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
-   url: 'http://localhost:5000/components',
+   url: 'http://localhost:5000/saveFiles',
    maxFilesize: 50,
    acceptedFiles: 'application/zip'
  };

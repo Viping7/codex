@@ -1,8 +1,7 @@
 const mongoose=require('mongoose');
 var componentSchema=mongoose.Schema({
     name:{
-        type:String,
-        required:true
+        type:String
     },
     description :{
         type:String

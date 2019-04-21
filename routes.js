@@ -23,8 +23,12 @@ module.exports = {
     'post' : [
         {
             path:'/components',
-            middleware:[upload.single('file')],
             controller: component.saveComponent,
+        },
+        {
+            path : '/saveFiles',
+            middleware:[upload.single('file')],
+            controller : component.uploadFilestoDB
         }
     ]
 }
