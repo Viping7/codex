@@ -10,7 +10,7 @@ const jsdom = require('jsdom-arc-extn');
 const directiveMap = require('../helpers/reactDirectiveMapping');
 const { JSDOM } = jsdom;
 const template = require('../templates');
-var ts= require('typescript-parser');
+var ts= require('typescript-parser-deluxe');
 var parser =new ts.TypescriptParser();
 var fs = require("fs");
 var reactComponent = require('./reactComponent');
@@ -120,7 +120,7 @@ module.exports= {
     try{
         parser.parseSource(tsString).then(function(result){
           result.declarations.forEach(declaration => {
-           let stateParams = reactState(declaration.properties);
+           let stateParams = reactState(declaration.properties,tsString);
                 reactDeclarations.stateParams = stateParams;
                 console.log("react Declarations",reactDeclarations);
                 next(null,reactDeclarations);
@@ -132,22 +132,23 @@ module.exports= {
       next(e)
     }
   }
-  function reactState(properties){
+  function reactState(properties,tsString){
     let stateStructure =`this.state={`;
     properties.forEach(property=>{
-
-          stateStructure += `${property.name}`+':'+`${property.type}`+',';
-        
-      
-    })
-   
-    console.log("state Structre",stateStructure.replace(/"/g,""));
+        if((property.end-property.start-1)>property.name.length){
+          var propertyType=tsString.substring(property.start,property.end);
+          if(propertyType.slice(-1) == ";"){
+            propertyType=propertyType.substring(0,propertyType.length-1);
+            stateStructure += propertyType+',';
+          }
+        }
+    });
+    stateStructure=stateStructure.replace(/=/g,":");
+    stateStructure=stateStructure.replace(":","=");
     var lIndex= stateStructure.lastIndexOf(',');
     let finalState = replaceAt(lIndex,stateStructure);
     console.log("final state structure after ,",finalState);
-   // stateStructure.replaceAt(lIndex,stateStructure);
-    return finalState.replace(/"/g,"");
-    
+    return finalState;
   }
 
   function replaceAt(lIndex,input){
