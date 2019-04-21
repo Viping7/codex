@@ -3,7 +3,7 @@ var grammar = require('./../grammar')
 var request ="import { Component } from '@angular/core'@Component({  selector: 'app-root',  templateUrl: './app.component.html', styleUrls: ['./app.component.css']})export class AppComponent {title = 'Tour of Heroes';getData(){}}"
 var AdmZip = require("adm-zip");
 var async = require('async');
-const ELEMENTS = ["button", "section", "header", "nav", "button", "table", "input", "p", "h1", "h2","h3","h4","div","tr","th","td"];
+const ELEMENTS = ["div","button", "section", "header", "nav", "button", "table", "input", "p","ul","li","h1", "h2","h3","h4","tr","th","td"];
 const angularDirectives = ['*ngif','*ngfor','[(ngmodel)]',"[hidden]","(click)"];
 var UIFILES = ['html','css','scss','ts'];
 const jsdom = require('jsdom-arc-extn');
@@ -64,7 +64,7 @@ module.exports= {
                next(err);
              }
              var zip = new AdmZip();
-             html = template['react'](name,"css",results[0],results[1].stateParams);
+             html = template['react'](name,"scss",results[0],results[1].stateParams);
              zip.addFile(`${name}.jsx`, Buffer.alloc(html.length, html), "This is a system generated file");
              zip.addFile(`${name}.css`, Buffer.alloc(data.css.length, data.css), "This is a system generated file");
              next(null,zip.toBuffer());
@@ -86,9 +86,7 @@ module.exports= {
       let finalString = window.document.querySelector('body').innerHTML;
       ELEMENTS.forEach(e => {
         var selectedElements = window.document.querySelectorAll(e);
-        if(e == 'th'){
-          console.log("dsfd");
-        }
+
         for(let eleKey in selectedElements) {
             if(!isNaN(eleKey)) {
               let attributes = selectedElements[eleKey].attributes;
@@ -99,10 +97,9 @@ module.exports= {
               });
               for(let j=0;j<attributes.length;j++){
                   if(attributes[j] && angularDirectives.includes(attributes[j].name)){
-                    console.log(selectedElements[eleKey].outerHTML);
-                    finalString=finalString.replace(selectedElements[eleKey].outerHTML,
+                                 finalString=finalString.replace(selectedElements[eleKey].outerHTML,
                       directiveMap[attributes[j].name](attributes[j].value,selectedElements[eleKey].innerHTML,e,classNames));
-                  };
+                    };
               }
             }
         }
