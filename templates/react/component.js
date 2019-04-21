@@ -1,5 +1,5 @@
 
-module.exports = (name,extn,html,state) =>{
+module.exports = (name,extn,html,state,methods) =>{
     let structure = `
     import React, { Component } from 'react';
     import './${name}.${extn}';
@@ -8,6 +8,7 @@ module.exports = (name,extn,html,state) =>{
             super(props);
         }
         render(){
+            ${methods}
             return(
                 ${html}
             )

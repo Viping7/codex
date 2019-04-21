@@ -64,7 +64,7 @@ module.exports= {
                next(err);
              }
              var zip = new AdmZip();
-             html = template['react'](name,"scss",results[0],results[1].stateParams);
+             html = template['react'](name,"css",results[0],results[1].stateParams,results[1].methods);
              zip.addFile(`${name}.jsx`, Buffer.alloc(html.length, html), "This is a system generated file");
              zip.addFile(`${name}.scss`, Buffer.alloc(data.css.length, data.css), "This is a system generated file");
              next(null,zip.toBuffer());
@@ -118,10 +118,13 @@ module.exports= {
   function readTsFile(tsString,next){
    let  reactDeclarations ={};
     try{
-        parser.parseSource(tsString).then(function(result){
+      
+        parser.parseSource(tsString,ts.TS).then(function(result){
           result.declarations.forEach(declaration => {
-           let stateParams = reactState(declaration.properties,tsString);
+            let stateParams = reactState(declaration.properties,tsString);
+            let methods = reactMethod(declaration.methods);
                 reactDeclarations.stateParams = stateParams;
+                reactDeclarations.methods = methods;
                 console.log("react Declarations",reactDeclarations);
                 next(null,reactDeclarations);
           });
@@ -150,8 +153,26 @@ module.exports= {
     console.log("final state structure after ,",finalState);
     return finalState;
   }
+   function reactMethod(methods){
+    let reactMethods=""
+     methods.forEach(method =>{
+        if(method.name="ngOnInit"){
+          reactMethods +='componentDidMount(){},'
+        }
+        else {
+          reactMethods += method.name+'(){}'
+        }
+     })
+     return reactMethods;
+   }
+
 
   function replaceAt(lIndex,input){
     return input.substring(0, lIndex) + "" + input.substring(lIndex + 1)+'}';
 
+  }
+  function getValueOfProperty(name,inputString){
+    let firstIndex = inputString.indexOf(name);
+    let propValue = inputString.substring(firstIndex);
+    return propValue;
   }
