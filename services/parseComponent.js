@@ -55,7 +55,7 @@ module.exports= {
                 if(err){
                   return next(err);
                 }
-                callback(null,ts);
+                callback(null,"");
               })
              }
            ],function(err,results){
