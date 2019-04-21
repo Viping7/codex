@@ -66,7 +66,7 @@ module.exports= {
              var zip = new AdmZip();
              html = template['react'](name,"scss",results[0],results[1].stateParams);
              zip.addFile(`${name}.jsx`, Buffer.alloc(html.length, html), "This is a system generated file");
-             zip.addFile(`${name}.css`, Buffer.alloc(data.css.length, data.css), "This is a system generated file");
+             zip.addFile(`${name}.scss`, Buffer.alloc(data.css.length, data.css), "This is a system generated file");
              next(null,zip.toBuffer());
            })
         }catch(e){
