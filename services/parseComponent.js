@@ -122,7 +122,7 @@ module.exports= {
         parser.parseSource(tsString,ts.TS).then(function(result){
           result.declarations.forEach(declaration => {
             let stateParams = reactState(declaration.properties,tsString);
-            let methods = reactMethod(declaration.methods);
+            let methods = reactMethod(declaration.methods,tsString);
                 reactDeclarations.stateParams = stateParams;
                 reactDeclarations.methods = methods;
                 console.log("react Declarations",reactDeclarations);
@@ -153,16 +153,12 @@ module.exports= {
     console.log("final state structure after ,",finalState);
     return finalState;
   }
-   function reactMethod(methods){
-    let reactMethods=""
+   function reactMethod(methods,tsString){
+    let reactMethods="";
      methods.forEach(method =>{
-        if(method.name="ngOnInit"){
-          reactMethods +='componentDidMount(){},'
-        }
-        else {
-          reactMethods += method.name+'(){}'
-        }
+       reactMethods+=tsString.substring(method.start ,method.end) + ";\n";
      })
+     reactMethods=reactMethods.replace("ngOnInit","componentDidMount");
      return reactMethods;
    }
 

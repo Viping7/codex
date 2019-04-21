@@ -8,8 +8,8 @@ module.exports = (name,extn,html,state,methods) =>{
             super(props);
             ${state}
         }
+        ${methods}
         render(){
-            ${methods}
             return(
                 ${html}
             )
