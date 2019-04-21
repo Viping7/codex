@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
 var app = express();
+var cors = require('cors');
 var routeEr = require('route-er');
 var port=process.env.PORT || 5000;
 const mongoose = require('mongoose');
@@ -14,6 +15,8 @@ app.use(express.static(path.join(__dirname,'./dist')))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 routeEr.setRoutePath(__dirname + '/routes.js'); 
+app.use(cors());
+
 app.use('/',routeEr.init('byMethod'));
 app.listen(port,function(){
     console.log(`Application running on ${port}!`);

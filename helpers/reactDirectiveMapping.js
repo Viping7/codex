@@ -21,7 +21,7 @@ module.exports = {
     "(click)":(value,input,tagName,classes)=>{
         try{    
             let replacedContent = `
-                <${tagName} className="${classes.join(' ')}" onClick={${value}}">${input}</${tagName}>
+                <${tagName} className="${classes.join(' ')}" onClick={()=>this.${value}}>${input}</${tagName}>
             `
             return replacedContent;
         }catch(e){

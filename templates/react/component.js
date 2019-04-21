@@ -6,6 +6,7 @@ module.exports = (name,extn,html,state,methods) =>{
     class ${name} extends Component {
         constructor(props){
             super(props);
+            ${state}
         }
         render(){
             ${methods}
