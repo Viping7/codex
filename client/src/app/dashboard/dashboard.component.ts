@@ -9,15 +9,17 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-
+  
   constructor(private restService : RestService, private router: Router,private modalService: NgbModal) { }
   components:any = [];
+  formData;
   newComponent={
     name : "",
     description : ""
   }
   ngOnInit() {
     this.getComponents();
+    this.formData = new FormData();
   }
   getComponents(){
     this.restService.getComponents().subscribe(component=>{
@@ -34,10 +36,21 @@ export class DashboardComponent implements OnInit {
   }
   onFilesAdded(files: File[]){
     console.log(files);
-    this.newComponent["file"]=files[0];
-  }
+    const reader = new FileReader();
+    reader.onload = (e: ProgressEvent) => {
+      const content = (e.target as FileReader).result;
+        console.log(content);
+       };
+    this.formData.append('file',files);
+       this.newComponent["file"] = new Blob(files);
+   }
   uploadAndParseFiles(){
-    this.restService.saveComponent(this.newComponent).subscribe(data=>{
+    var formData=new FormData();
+    formData.append('file',this.newComponent["file"]);
+    this.formData.append('name',this.newComponent.name);
+    this.formData.append('description', this.newComponent.description) 
+    this.restService.saveComponent(this.formData).subscribe(data=>{
+      console.log(data);
     });
   }
 }

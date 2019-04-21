@@ -48,7 +48,8 @@ module.exports={
                         res.status(200).json({
                             'result' : {
                                 'status' :200,
-                                'message': 'Saved successfully'
+                                'message': 'Saved successfully',
+                                'data' : components
                             }
                         });
                     }
@@ -86,6 +87,26 @@ module.exports={
             });
         }
     })
+    },
+    createOrUpdate : function(req,res){
+        component.createOrUpdate(req.body,function(err,data){
+            if(err){
+                res.status(500).json({
+                    'result' : {
+                        'status' :500,
+                        'error': 'Unable to fetch data'
+                    }
+                })
+            }
+            else{
+                res.status(200).json({
+                    'result' : {
+                        'status' :200,
+                        'data' : data
+                    }
+                })
+            }
+        })
     },
     convertAndDownload: function(req,res){
         component.getComponentsById(req.params.id, function(err,components){

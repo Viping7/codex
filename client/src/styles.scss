@@ -52,3 +52,29 @@ body{
           outline: none !important;
       }
   }
+  dropzone > .dropzone.dz-wrapper .dz-message{
+    margin-top:30px !important;
+    background-color: #1C312D !important;
+    height: 190px; 
+  }
+  dropzone > .dropzone.dz-wrapper .dz-message .dz-text{
+      color: rgba(255,255,255,0.65)
+  }
+  dropzone > .dropzone.dz-wrapper .dz-preview {
+    margin: 8px;
+    position: absolute;
+    left: 33%;
+    top: 50px;
+}
+.dropzone .dz-preview.dz-file-preview .dz-image{
+    background: none !important;
+}
+dropzone > .dropzone.dz-wrapper .dz-preview .dz-details{
+    color: rgba(255,255,255,0.65);
+}
+.dropzone .dz-preview .dz-details .dz-filename span, .dropzone .dz-preview .dz-details .dz-size span{
+    background: none !important;
+}
+.dz-progress{
+    display: none;
+}
